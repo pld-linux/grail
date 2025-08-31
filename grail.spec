@@ -5,12 +5,13 @@
 Summary:	Gesture Recognition And Instantiation Library
 Summary(pl.UTF-8):	Biblioteka rozpoznawania i instancjonowania gestów
 Name:		grail
-Version:	3.1.0
+Version:	3.1.1
 Release:	1
-License:	GPL v3 / LGPL v3
+# library sources are LGPL v3, but its only public header file is GPL v3+
+License:	GPL v3+/LGPL v3
 Group:		X11/Libraries
 Source0:	https://launchpad.net/grail/trunk/%{version}/+download/%{name}-%{version}.tar.bz2
-# Source0-md5:	2ac56af5f6f466b433c99ca12f34c34f
+# Source0-md5:	0df1b3ec6167920f310e2effe6e2ad44
 URL:		https://launchpad.net/grail
 BuildRequires:	evemu-devel
 BuildRequires:	frame-devel >= 2.5.0
@@ -18,9 +19,11 @@ BuildRequires:	xorg-lib-libX11-devel
 BuildRequires:	xorg-lib-libXext-devel
 BuildRequires:	xorg-lib-libXi-devel >= 1.6.0
 BuildRequires:	xorg-proto-inputproto-devel >= 2.2.0
-BuildRequires:	xorg-xserver-server-devel
-Requires(post,postun):	/sbin/ldconfig
+Requires:	frame >= 2.5.0
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
+
+# handled by configure
+%define		filterout_cpp	-DNDEBUG
 
 %description
 Grail consists of an interface and tools for handling gesture
@@ -66,7 +69,7 @@ Summary:	Header files for grail library
 Summary(pl.UTF-8):	Pliki nagłówkowe biblioteki grail
 Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
-Requires:	frame-devel
+Requires:	frame-devel >= 2.5.0
 
 %description devel
 Header files for grail library.
@@ -91,8 +94,11 @@ Statyczna biblioteka grail.
 
 %build
 %configure \
-	%{!?with_static_libs:--disable-static}
-%{__make} V=1
+	--disable-integration-tests \
+	--disable-silent-rules \
+	%{!?with_static_libs:--disable-static} \
+	--with-x11
+%{__make}
 
 %install
 rm -rf $RPM_BUILD_ROOT
@@ -125,11 +131,10 @@ rm -rf $RPM_BUILD_ROOT
 %{_mandir}/man1/grail-test-edge.1*
 %{_mandir}/man1/grail-test-propagation.1*
 
-
 %files devel
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/libgrail.so
-%{_includedir}/oif/*
+%{_includedir}/oif/grail.h
 %{_pkgconfigdir}/grail.pc
 
 %if %{with static_libs}
