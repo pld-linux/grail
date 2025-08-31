@@ -1,8 +1,9 @@
 #
 # Conditional build:
-%bcond_without	static_libs	# don't build static libraries
+%bcond_without	static_libs	# static library
 #
 Summary:	Gesture Recognition And Instantiation Library
+Summary(pl.UTF-8):	Biblioteka rozpoznawania i instancjonowania gestów
 Name:		grail
 Version:	3.1.0
 Release:	1
@@ -33,6 +34,20 @@ delivers the matching set of gestures.
 
 The library handles tentative getures, i.e., buffering of events for
 several alternative gestures until a match is confirmed.
+
+%description -l pl.UTF-8
+Grail (Gesture Recognition And Instantiation Library) składa się z
+interfejsu i narzędzi do obsługi rozpoznawania i instancjonowania
+gestów.
+
+Przy wykonaniu na urządzeniu wielodotykowego gestu, moduł rozpoznający
+emituje jeden lub więcej możliwych gestów. W momencie, kiedy kontest
+gestu jest znany, np. w jakim oknie znajdują się dotknięte miejsca
+oraz jakich gestów oczekują klienci okna, moduł instancjonujący
+dostarcza pasujący zbiór gestów.
+
+Biblioteka obsługuje niepewne gesty, tzn. buforuje zdarzenia pod
+kątem kilku alternatywnych gestów do czasu potwierdzenia dopasowania.
 
 %package tools
 Summary:	Test tools for grail library
